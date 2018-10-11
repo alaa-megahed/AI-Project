@@ -22,5 +22,26 @@ public class WestrosState extends State {
         this.whiteWalkers = whiteWalkers;
     }
 
+    @Override
+    public String toString() {
+
+        String s = "";
+        for (int i = 0; i < grid.length; i++) {
+            for(int j = 0; j < grid[i].length; j++) {
+                switch (grid[i][j]) {
+                    case 0: s += ". "; break;
+                    case 1: s += "J "; break;
+                    case 2: s += "D "; break;
+                    case 3: s += "W "; break;
+                    case 4: s += "O "; break;
+                }
+            }
+            s += "\n";
+        }
+
+        return s;
+
+    }
+
 
 }

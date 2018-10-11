@@ -23,8 +23,11 @@ abstract public class SearchProblem {
                 if (goal_test(current))
                     return current;
                 ArrayList<Node> next = expand(current);
-                for (Node node: next)
+                for (Node node: next) {
                     q.add(node);
+                    System.out.println(node.state);
+                    System.out.println("-------");
+                }
             }
 
             return null;

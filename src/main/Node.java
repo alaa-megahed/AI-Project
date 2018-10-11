@@ -27,4 +27,9 @@ public class Node implements Comparable<Node>{
     public int compareTo(Node node) {
         return (path_cost + heuristic) - (node.path_cost + node.heuristic);
     }
+
+    @Override
+    public String toString() {
+        return state.toString();
+    }
 }
