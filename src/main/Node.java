@@ -3,8 +3,8 @@ package main;
 public class Node implements Comparable<Node>{
 
     Node parent;
-    State state;
-    Operator operator;
+    public State state;
+    public Operator operator;
     int depth;
     public int path_cost;
     int heuristic;
