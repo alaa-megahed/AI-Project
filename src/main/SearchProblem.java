@@ -12,6 +12,8 @@ abstract public class SearchProblem {
     private Queue<Node> q;
     private Stack<Node> s;
     private PriorityQueue<Node> pq;
+    
+    private int expanded_nodes = 0;
 
     public Node search(String strategy) {
         int result [] = new int[3];
@@ -22,6 +24,7 @@ abstract public class SearchProblem {
                 Node current = q.poll();
                 if (goal_test(current))
                     return current;
+                expanded_nodes++;
                 ArrayList<Node> next = expand(current);
                 for (Node node: next)
                     q.add(node);
@@ -35,6 +38,7 @@ abstract public class SearchProblem {
                 Node current = s.pop();
                 if (goal_test(current))
                     return current;
+                expanded_nodes++;
                 ArrayList<Node> next = expand(current);
                 for (Node node: next)
                     s.add(node);
@@ -53,6 +57,7 @@ abstract public class SearchProblem {
                     Node current = s.pop();
                     if (goal_test(current))
                         return current;
+                    expanded_nodes++;
                     ArrayList<Node> next = expand(current);
                     for (Node node: next)
                         s.add(node);
@@ -63,6 +68,17 @@ abstract public class SearchProblem {
             return null;
 
         } else if (strategy.equals("UC")) {
+        	pq = new PriorityQueue<Node>();
+        	pq.add(new Node(null, initial, null, 0));
+              while(!pq.isEmpty()) {
+                  Node current = pq.poll();
+                  if (goal_test(current))
+                      return current;
+                  expanded_nodes++;
+                  ArrayList<Node> next = expand(current);
+                  for (Node node: next)
+                      pq.add(node);
+              }
 
         } else if (strategy.equals("GR1")) {
 
@@ -77,4 +93,7 @@ abstract public class SearchProblem {
         return null;
     }
 
+    public int count_expanded_nodes(){
+    	return expanded_nodes;
+    }
 }

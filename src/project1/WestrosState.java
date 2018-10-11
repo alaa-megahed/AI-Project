@@ -12,7 +12,7 @@ public class WestrosState extends State {
 
     public byte grid[][];
     public byte xJon, yJon, dragonGlasses, whiteWalkers;
-    public static byte maxDragonglasses;
+    public static byte maxDragonglasses = 1;
 
     public WestrosState(byte grid[][], byte xJon, byte yJon, byte dragonGlasses, byte whiteWalkers) {
         this.grid = grid;
@@ -20,6 +20,26 @@ public class WestrosState extends State {
         this.yJon = yJon;
         this.dragonGlasses = dragonGlasses;
         this.whiteWalkers = whiteWalkers;
+    }
+    
+    public String toString(){
+    	String res = "";
+    	for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[0].length; j++) {
+				switch(grid[i][j]){
+				case 0: res += "- "; break;
+				case 1: res+= "J "; break;
+				case 2: res += "S "; break;
+				case 3: res += "W "; break;
+				case 4: res += "O "; break;
+				}
+			}
+			res += "\n";
+		}
+    	res += "dragonglasses = " + dragonGlasses +"\n";
+    	res += "whiteWalkers = " + whiteWalkers + "\n"; 
+    	res += "================";
+    	return res;
     }
 
 

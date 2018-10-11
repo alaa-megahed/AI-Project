@@ -23,8 +23,13 @@ public class Node implements Comparable<Node>{
         this.heuristic = heuristic;
     }
 
-    @Override
     public int compareTo(Node node) {
         return (path_cost + heuristic) - (node.path_cost + node.heuristic);
+    }
+    
+    public String toString(){
+    	String res = "depth = " + depth + "\n";
+    	res += "path cost = " + path_cost;
+    	return res;
     }
 }
