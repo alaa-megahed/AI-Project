@@ -12,11 +12,12 @@ public class SaveWestros extends SearchProblem {
     public SaveWestros(WestrosState initial) {
 
         Operator operators[] = new Operator[]{
-                new Operator(1, 1), // move up
-                new Operator(1, 2), //move down
-                new Operator(1, 3), // move left
-                new Operator(1, 4), // move right
-                new Operator(20, 5), // kill adjacent
+
+                new Operator(12, 1), // move up
+                new Operator(12, 2), //move down
+                new Operator(12, 3), // move left
+                new Operator(12, 4), // move right
+                new Operator(1, 5), // kill adjacent
                 new Operator(0, 6) // pick up dragon glass
         };
 
@@ -35,138 +36,98 @@ public class SaveWestros extends SearchProblem {
     }
 
     @Override
-    public ArrayList<Node> expand(Node node) {
+    public ArrayList<Node> expand(Node node, String strategy) {
         WestrosState state = ((WestrosState)node.state);
+        System.out.println(state);
         ArrayList<Node> result = new ArrayList<>();
-
         for (Operator op: operators) {
-            // deepcopy grid array
-            byte [][] grid = new byte[state.grid.length][state.grid[0].length];
-            for (int i = 0; i < grid.length; i++)
-                for(int j = 0; j < grid[0].length; j++)
-                    grid[i][j] = state.grid[i][j];
-            //initialize parameters for new state
+            byte [][] grid = copy(state.grid);
             byte yJon_new = state.yJon;
             byte xJon_new = state.xJon;
             byte dragonGlasses_new = state.dragonGlasses;
             byte whiteWalkers_new = state.whiteWalkers;
             boolean add = false;
-            boolean steppedOnStone = false; //indicates whether Jon has been in a dragonstone cell
             switch (op.id) {
                 case 1: {
-                    //move is valid
-                    if (valid(grid, ((byte)(yJon_new - 1)), xJon_new)) {
-                        //if Jon was in a dragonstone cell, return it to its original state
-                        if (steppedOnStone) {
-                            grid[yJon_new][xJon_new] = 2;
-                            steppedOnStone = false;
-                        } else {
-                            //if Jon is an empty cell, change it back to empty
-                            grid[yJon_new][xJon_new] = 0;
-                        }
+                    if (state.yJon > 0 && (grid[yJon_new - 1][xJon_new] == 0 ||  grid[yJon_new - 1][xJon_new] == 2)) {
+                    	grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 1) ? (byte) 0 : 2;
                         yJon_new--;
-                        //make the move
-                        grid[yJon_new][xJon_new] = 1;
-                        //if the new cell is a dragonstone cell, set the flag to true again
-                        if(grid[yJon_new][xJon_new] == 2) {
-                            steppedOnStone = true;
-                        }
+                        grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 0) ? (byte) 1 : 2;
                         add = true;
                     }
-                    break;
-                }
+                } break;
                 case 2: {
-                    if (valid(grid, ((byte)(yJon_new + 1)), xJon_new )) {
-                        if (steppedOnStone) {
-                            grid[yJon_new][xJon_new] = 2;
-                            steppedOnStone = false;
-                        } else {
-                            grid[yJon_new][xJon_new] = 0;
-                        }
+                    if (state.yJon < grid.length - 1 && (grid[yJon_new + 1][xJon_new] == 0 ||  grid[yJon_new + 1][xJon_new] == 2)) {
+                    	grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 1) ? (byte) 0 : 2;
                         yJon_new++;
-                        grid[yJon_new][xJon_new] = 1;
-                        if(grid[yJon_new][xJon_new] == 2) {
-                            steppedOnStone = true;
-                        }
+                        grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 0) ? (byte) 1 : 2;
                         add = true;
                     }
-                    break;
-                }
+                } break;
                 case 3: {
-                    if (valid(grid, yJon_new, ((byte) (xJon_new - 1)))) {
-                        if (steppedOnStone) {
-                            grid[yJon_new][xJon_new] = 2;
-                            steppedOnStone = false;
-                        } else {
-                            grid[yJon_new][xJon_new] = 0;
-                        }
+                    if (state.xJon > 0 && (grid[yJon_new][xJon_new - 1] == 0 ||  grid[yJon_new][xJon_new - 1] == 2)) {
+                    	grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 1) ? (byte) 0 : 2;
                         xJon_new--;
-                        grid[yJon_new][xJon_new] = 1;
-                        if(grid[yJon_new][xJon_new] == 2) {
-                            steppedOnStone = true;
-                        }
+                        grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 0) ? (byte) 1 : 2;
                         add = true;
                     }
-                    break;
-                }
+                } break;
                 case 4: {
 
-                    if (valid(grid, yJon_new, ((byte) (xJon_new + 1)))) {
-                        if (steppedOnStone) {
-                            grid[yJon_new][xJon_new] = 2;
-                            steppedOnStone = false;
-                        } else {
-                            grid[yJon_new][xJon_new] = 0;
-                        }
+                    if ( state.xJon < grid[0].length - 1 && (grid[yJon_new][xJon_new + 1] == 0 ||  grid[yJon_new][xJon_new + 1] == 2)) {
+                    	grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 1) ? (byte) 0 : 2;
                         xJon_new++;
-                        grid[yJon_new][xJon_new] = 1;
-                        if(grid[yJon_new][xJon_new] == 2) {
-                            steppedOnStone = true;
-                        }
+                        grid[yJon_new][xJon_new] = (grid[yJon_new][xJon_new] == 0) ? (byte) 1 : 2;
                         add = true;
                     }
-                    break;
-                }
+                } break;
                 case 5: {
-                    byte dx [] = {0, 0, -1, 1};
-                    byte dy [] = {1, -1, 0, 0};
-                    for (int i = 0; i < dx.length; i++) {
-                        byte x = (byte) (xJon_new + dx[i]);
-                        byte y = (byte) (yJon_new + dy[i]);
-
-                        if ( x >= 0 && x < grid[0].length && y >= 0 && y < grid.length && state.dragonGlasses > 0) {
-                            if (grid[y][x] == 3) {
-                                add = true;
-                                grid[y][x] = 0;
-                                whiteWalkers_new--;
+                	if(dragonGlasses_new > 0){
+                        byte dx [] = {0, 0, -1, 1};
+                        byte dy [] = {1, -1, 0, 0};
+                        for (int i = 0; i < dx.length; i++) {
+                            byte x = (byte) (xJon_new + dx[i]);
+                            byte y = (byte) (yJon_new + dy[i]);
+                            if ( x >= 0 && x < grid[0].length && y >= 0 && y < grid.length) {
+                                if (grid[y][x] == 3) {
+                                    add = true;
+                                    grid[y][x] = 0;
+                                    whiteWalkers_new--;
+                                }
                             }
                         }
-
-                    }
-                    break;
-                }
+                        if(add)
+                        	dragonGlasses_new--;
+                	}
+        
+                } break;
                 case 6: {
-                    if(grid[yJon_new][xJon_new] == 2) {
+                    if(dragonGlasses_new == 0 && grid[state.yJon][state.xJon] == 2) {
                         dragonGlasses_new  = WestrosState.maxDragonglasses;
                         add = true;
                     }
-                    break;
                 }
                 default:
                     break;
             }
-
-            if(add) {
-                WestrosState new_state = new WestrosState(grid, xJon_new, yJon_new, dragonGlasses_new, whiteWalkers_new);
-                Node new_node = new Node(node, new_state, op, 0);
-                result.add(new_node);
+            if(add){
+            	WestrosState new_state = new WestrosState(grid, xJon_new, yJon_new, dragonGlasses_new, whiteWalkers_new);
+                Node new_node = new Node(node, new_state, op, 0, false);
+                if ((node.parent != null && !new_state.equals(node.parent.state)) || node.parent == null)
+                    result.add(new_node);
             }
+            
         }
         return result;
      }
 
-     public static boolean valid(byte [][] grid, byte x, byte y) {
-            return x >= 0 && x < grid[0].length && y >= 0 && y < grid.length && grid[x][y] != 3 && grid[x][y] != 4;
-     }
-
+    public static byte [][] copy (byte [][] grid) {
+        byte [][] result = new byte[grid.length][grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                result[i][j] = grid[i][j];
+            }
+        }
+        return result;
+    }
 }
