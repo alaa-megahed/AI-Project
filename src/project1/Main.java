@@ -3,6 +3,8 @@ package project1;
 import main.Node;
 import main.SearchProblem;
 
+import java.util.Stack;
+
 public class Main {
 
     public static byte [][] GenGrid() {
@@ -17,20 +19,24 @@ public class Main {
 
     }
 
-    public static Node Search(byte grid [][], String strategy, boolean visualize) {
+    public static SearchProblem.Result Search(byte grid [][], String strategy, boolean visualize) {
 
         WestrosState initial = new WestrosState(grid, (byte) 0, (byte) 3, (byte) 1, (byte) 4);
         SearchProblem problem = new SaveWestros(initial);
 
-        Node result = problem.search(strategy);
-        System.out.println("total expanded nodes = " + problem.count_expanded_nodes());
+        SearchProblem.Result result = problem.search(strategy);
+        if(visualize) {
+            Node[] resultArray = result.resultArray;
+            for (Node node: resultArray) {
+                System.out.println(node.state);
+            }
+        }
         return result;
     }
     public static void main(String [] args) {
-    	Node result = Search(GenGrid(), "GR1", false);
-        Node result1 = Search(GenGrid(), "A*1", false);
-        
-        System.out.println(result);
-    	System.out.println(result1);
+        SearchProblem.Result resultBFS = Search(GenGrid(), "BFS", false);
+        SearchProblem.Result resultGR = Search(GenGrid(), "GR1", true);
+        System.out.println(resultGR);
     }
+
 }

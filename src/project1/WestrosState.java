@@ -37,7 +37,7 @@ public class WestrosState extends State {
 			res += "\n";
 		}
     	res += "dragonglasses = " + dragonGlasses +"\n";
-    	res += "whiteWalkers = " + whiteWalkers + "\n"; 
+    	res += "whiteWalkers = " + whiteWalkers + "\n";
     	res += "================";
     	return res;
     }

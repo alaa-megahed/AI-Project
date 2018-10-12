@@ -14,12 +14,12 @@ public class SaveWestros extends SearchProblem {
 
         Operator operators[] = new Operator[]{
 
-                new Operator(12, 1), // move up
-                new Operator(12, 2), //move down
-                new Operator(12, 3), // move left
-                new Operator(12, 4), // move right
-                new Operator(1, 5), // kill adjacent
-                new Operator(0, 6) // pick up dragon glass
+                new Operator(12, 1, "Move up"), // move up
+                new Operator(12, 2, "Move down"), //move down
+                new Operator(12, 3, "Move left"), // move left
+                new Operator(12, 4, "Move right"), // move right
+                new Operator(1, 5, "Kill adjacent Whitewalkers"), // kill adjacent
+                new Operator(0, 6, "Pick up dragon glasses") // pick up dragon glass
         };
 
         this.operators = operators;
@@ -40,7 +40,6 @@ public class SaveWestros extends SearchProblem {
     public ArrayList<Node> expand(Node node, String strategy) {
         WestrosNode westrosNode = (WestrosNode) node;
         WestrosState state = ((WestrosState)node.state);
-        System.out.println(state);
         ArrayList<Node> result = new ArrayList<>();
         for (Operator op: operators) {
             byte [][] grid = copy(state.grid);
