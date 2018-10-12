@@ -12,7 +12,7 @@ public class WestrosState extends State {
 
     public byte grid[][];
     public byte xJon, yJon, dragonGlasses, whiteWalkers;
-    public static byte maxDragonglasses = 1;
+    public byte maxDragonglasses;
 
     public WestrosState(byte grid[][], byte xJon, byte yJon, byte dragonGlasses, byte whiteWalkers) {
         this.grid = grid;
@@ -37,7 +37,7 @@ public class WestrosState extends State {
 			res += "\n";
 		}
     	res += "dragonglasses = " + dragonGlasses +"\n";
-    	res += "whiteWalkers = " + whiteWalkers + "\n"; 
+    	res += "whiteWalkers = " + whiteWalkers + "\n";
     	res += "================";
     	return res;
     }
@@ -56,5 +56,11 @@ public class WestrosState extends State {
         return equal && this.dragonGlasses == state.dragonGlasses;
     }
 
+    public byte get_maxDragonglasses() {
+    	return maxDragonglasses;
+    }
+    public void set_maxDragonglasses(byte maxDragonglasses) {
+    	this.maxDragonglasses = maxDragonglasses;
+    }
 
 }

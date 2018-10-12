@@ -14,12 +14,12 @@ public class SaveWestros extends SearchProblem {
 
         Operator operators[] = new Operator[]{
 
-                new Operator(12, 1), // move up
-                new Operator(12, 2), //move down
-                new Operator(12, 3), // move left
-                new Operator(12, 4), // move right
-                new Operator(1, 5), // kill adjacent
-                new Operator(0, 6) // pick up dragon glass
+                new Operator(16, 1, "Move up"), // move up
+                new Operator(16, 2, "Move down"), //move down
+                new Operator(16, 3, "Move left"), // move left
+                new Operator(16, 4, "Move right"), // move right
+                new Operator(1, 5, "Kill adjacent Whitewalkers"), // kill adjacent
+                new Operator(0, 6, "Pick up dragon glasses") // pick up dragon glass
         };
 
         this.operators = operators;
@@ -40,7 +40,6 @@ public class SaveWestros extends SearchProblem {
     public ArrayList<Node> expand(Node node, String strategy) {
         WestrosNode westrosNode = (WestrosNode) node;
         WestrosState state = ((WestrosState)node.state);
-        System.out.println(state);
         ArrayList<Node> result = new ArrayList<>();
         for (Operator op: operators) {
             byte [][] grid = copy(state.grid);
@@ -104,8 +103,9 @@ public class SaveWestros extends SearchProblem {
         
                 } break;
                 case 6: {
-                    if(dragonGlasses_new == 0 && grid[state.yJon][state.xJon] == 2) {
-                        dragonGlasses_new  = WestrosState.maxDragonglasses;
+                	byte maxDragonglasses = ((WestrosState)node.state).get_maxDragonglasses();
+                    if(dragonGlasses_new < maxDragonglasses && grid[state.yJon][state.xJon] == 2) {
+                        dragonGlasses_new  = maxDragonglasses;
                         add = true;
                     }
                 }
@@ -114,9 +114,9 @@ public class SaveWestros extends SearchProblem {
             }
             if(add){
             	WestrosState new_state = new WestrosState(grid, xJon_new, yJon_new, dragonGlasses_new, whiteWalkers_new);
-                WestrosNode new_node = new WestrosNode(westrosNode, new_state, op, strategy);
-                if ((node.parent != null && !new_state.equals(node.parent.state)) || node.parent == null)
-                    result.add(new_node);
+                new_state.set_maxDragonglasses(((WestrosState)node.state).get_maxDragonglasses());
+            	WestrosNode new_node = new WestrosNode(westrosNode, new_state, op, strategy);
+                result.add(new_node);
             }
             
         }
