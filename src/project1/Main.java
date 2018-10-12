@@ -27,10 +27,7 @@ public class Main {
         return result;
     }
     public static void main(String [] args) {
-    	Node result = Search(GenGrid(), "GR1", false);
-        Node result1 = Search(GenGrid(), "A*1", false);
-        
+    	Node result = Search(GenGrid(), "GR2", false);
         System.out.println(result);
-    	System.out.println(result1);
     }
 }
