@@ -25,7 +25,7 @@ public class WestrosNode extends Node {
 					}
 				}
 			}
-        	return (int) (Math.ceil(((WestrosState)state).whiteWalkers)/4) + (max_dist * 12);
+        	return (int) (Math.ceil(((WestrosState)state).whiteWalkers)/4) + (max_dist * 16);
         }
             
         return 0;

@@ -16,8 +16,8 @@ public class Main {
 //                {1, 0, 0, 0}
 //        };
         
-        int n = ThreadLocalRandom.current().nextInt(4, 5);
-        int m = ThreadLocalRandom.current().nextInt(4, 5);
+        int n = ThreadLocalRandom.current().nextInt(4, 7);
+        int m = ThreadLocalRandom.current().nextInt(4, 7);
         byte [][] grid = new byte[n][m];
         grid[n - 1][m - 1] = 1;
         while(true)
@@ -31,8 +31,8 @@ public class Main {
             	
         }
         
-        int whitewalkers = ThreadLocalRandom.current().nextInt(3, 5);
-        int obstacles = ThreadLocalRandom.current().nextInt(1, 3);
+        int whitewalkers = ThreadLocalRandom.current().nextInt(3, 6);
+        int obstacles = ThreadLocalRandom.current().nextInt(1, 4);
         while(whitewalkers > 0 || obstacles > 0)
         {
         	int random = ThreadLocalRandom.current().nextInt(0, 3);
