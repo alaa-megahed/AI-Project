@@ -9,100 +9,26 @@ abstract public class SearchProblem {
     public abstract boolean goal_test(Node node);
     public abstract int path_cost(Node node);
     public abstract ArrayList<Node> expand(Node node, String strategy);
-    private Queue<Node> q;
-    private Stack<Node> s;
-    private PriorityQueue<Node> pq;
+    public abstract Node createNode(State state, String strategy);
     
     private int expanded_nodes = 0;
 
     public Node search(String strategy) {
         int result [] = new int[3];
-        if (strategy.equals("BFS")) {
-            q = new LinkedList<>();
-            q.add(new Node(null, initial, null, 0, false));
-            while(!q.isEmpty()) {
-                Node current = q.poll();
-                if (goal_test(current))
-                    return current;
-                expanded_nodes++;
-                ArrayList<Node> next = expand(current, strategy);
-                for (Node node: next) {
-                    q.add(node);
-                    System.out.println(node.state);
-                    System.out.println("-------");
-                }
+        SearchQueue q = new SearchQueue(strategy);
+        q.add(createNode(initial, strategy));
+
+        while(!q.isEmpty()) {
+            Node current = q.removeFirst();
+            if(goal_test(current))
+                return current;
+            expanded_nodes++;
+            ArrayList<Node> next = expand(current, strategy);
+            for (Node node: next) {
+                q.add(node);
+                System.out.println(node.state);
+                System.out.println("-------");
             }
-
-            return null;
-        } else if (strategy.equals("DFS")) {
-            s = new Stack<>();
-            s.add(new Node(null, initial, null, 0, false));
-            while(!s.isEmpty()) {
-                Node current = s.pop();
-                if (goal_test(current))
-                    return current;
-                expanded_nodes++;
-                ArrayList<Node> next = expand(current, strategy);
-                for (Node node: next)
-                    s.add(node);
-            }
-
-            return null;
-
-        } else if (strategy.equals("ID")) {
-            for (int l = 0; l < 10000; l++) {
-                s = new Stack<>();
-                int d = 0;
-                s.add(new Node(null, initial, null, 0, false));
-                while(!s.isEmpty()) {
-                    if( d > l)
-                        break;
-                    Node current = s.pop();
-                    if (goal_test(current))
-                        return current;
-                    expanded_nodes++;
-                    ArrayList<Node> next = expand(current, strategy);
-                    for (Node node: next)
-                        s.add(node);
-                    d++;
-                }
-            }
-
-            return null;
-
-        } else if (strategy.equals("UC")) {
-        	pq = new PriorityQueue<Node>();
-        	pq.add(new Node(null, initial, null, 0, false));
-              while(!pq.isEmpty()) {
-                  Node current = pq.poll();
-                  if (goal_test(current))
-                      return current;
-                  expanded_nodes++;
-                  ArrayList<Node> next = expand(current, strategy);
-                  for (Node node: next)
-                      pq.add(node);
-              }
-
-        } else if (strategy.equals("GR1")) {
-            pq = new PriorityQueue<Node>();
-            pq.add(new Node(null, initial, null, 0, true));
-            while(!pq.isEmpty()) {
-                Node current = pq.poll();
-                if (goal_test(current))
-                    return current;
-                expanded_nodes++;
-                ArrayList<Node> next = expand(current, strategy);
-                for (Node node: next)
-                    pq.add(node);
-            }
-
-
-        } else if (strategy.equals("GR2")) {
-
-        } else if (strategy.equals("A*1")) {
-
-        } else {
-
         }
 
         return null;
@@ -110,5 +36,56 @@ abstract public class SearchProblem {
 
     public int count_expanded_nodes(){
     	return expanded_nodes;
+    }
+
+    static class SearchQueue {
+
+        private Queue<Node> q;
+        private Stack<Node> s;
+        private PriorityQueue<Node> pq;
+        private String strategy;
+        public SearchQueue(String strategy) {
+            if (strategy.equals("BFS")) {
+                q = new LinkedList<>();
+            } else if (strategy.equals("DFS") || strategy.equals("ID")) {
+                s = new Stack<>();
+            } else if (strategy.equals("UC") || strategy.startsWith("GR") || strategy.startsWith("A*")) {
+                pq = new PriorityQueue<>();
+            }
+            this.strategy = strategy;
+        }
+
+        public void add(Node node) {
+            if (strategy.equals("BFS")) {
+                q.add(node);
+            } else if (strategy.equals("DFS") || strategy.equals("ID")) {
+                s.push(node);
+            } else if (strategy.equals("UC") || strategy.startsWith("GR") || strategy.startsWith("A*")) {
+                pq.add(node);
+            }
+        }
+
+        public Node removeFirst() {
+            if (strategy.equals("BFS")) {
+                return q.remove();
+            } else if (strategy.equals("DFS") || strategy.equals("ID")) {
+                return s.pop();
+            } else if (strategy.equals("UC") || strategy.startsWith("GR") || strategy.startsWith("A*")) {
+                return pq.remove();
+            }
+            return null;
+        }
+
+        public boolean isEmpty() {
+            if (strategy.equals("BFS")) {
+                return q.isEmpty();
+            } else if (strategy.equals("DFS") || strategy.equals("ID")) {
+                return s.isEmpty();
+            } else if (strategy.equals("UC") || strategy.startsWith("GR") || strategy.startsWith("A*")) {
+                return pq.isEmpty();
+            }
+            return false;
+        }
+
     }
 }

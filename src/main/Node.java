@@ -1,6 +1,6 @@
 package main;
 
-public class Node implements Comparable<Node>{
+abstract public class Node implements Comparable<Node>{
 
     public Node parent;
     public State state;
@@ -8,9 +8,9 @@ public class Node implements Comparable<Node>{
     int depth;
     public int path_cost;
     int heuristic;
-    boolean greedy;
-
-    public Node(Node parent, State state, Operator operator, int heuristic, boolean greedy) {
+    public String strategy;
+    public abstract int heuristic();
+    public Node(Node parent, State state, Operator operator, String strategy) {
         this.parent = parent;
         if (parent == null) {
             depth = 0;
@@ -21,12 +21,12 @@ public class Node implements Comparable<Node>{
         }
         this.state = state;
         this.operator = operator;
-        this.heuristic = heuristic;
-        this.greedy = greedy;
+        this.strategy = strategy;
+        this.heuristic = heuristic();
     }
 
     public int compareTo(Node node) {
-        if (greedy) {
+        if (strategy.startsWith("GR")) {
             return heuristic - node.heuristic;
         }
         return (path_cost + heuristic) - (node.path_cost + node.heuristic);

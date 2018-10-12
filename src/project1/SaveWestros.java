@@ -3,6 +3,7 @@ package project1;
 import main.Node;
 import main.Operator;
 import main.SearchProblem;
+import main.State;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class SaveWestros extends SearchProblem {
 
     @Override
     public ArrayList<Node> expand(Node node, String strategy) {
+        WestrosNode westrosNode = (WestrosNode) node;
         WestrosState state = ((WestrosState)node.state);
         System.out.println(state);
         ArrayList<Node> result = new ArrayList<>();
@@ -112,7 +114,7 @@ public class SaveWestros extends SearchProblem {
             }
             if(add){
             	WestrosState new_state = new WestrosState(grid, xJon_new, yJon_new, dragonGlasses_new, whiteWalkers_new);
-                Node new_node = new Node(node, new_state, op, 0, false);
+                WestrosNode new_node = new WestrosNode(westrosNode, new_state, op, strategy);
                 if ((node.parent != null && !new_state.equals(node.parent.state)) || node.parent == null)
                     result.add(new_node);
             }
@@ -120,6 +122,11 @@ public class SaveWestros extends SearchProblem {
         }
         return result;
      }
+
+    @Override
+    public Node createNode(State state, String strategy) {
+        return new WestrosNode(null, (WestrosState) state, null, strategy);
+    }
 
     public static byte [][] copy (byte [][] grid) {
         byte [][] result = new byte[grid.length][grid[0].length];
