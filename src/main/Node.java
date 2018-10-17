@@ -1,6 +1,18 @@
 package main;
 
-abstract public class Node implements Comparable<Node>{
+/**
+ * A class for general search-tree nodes.
+ * A node has knowledge of 
+ * (1) the state to which the node corresponds,
+ * (2) the parent node,
+ * (3) the operator applied to generate this node,
+ * (4) the depth of the node in the tree,
+ * (5) the path cost from the root.
+ * In addition to the search strategy.
+ *
+ */
+
+public class Node implements Comparable<Node>{
 
     public Node parent;
     public State state;
@@ -9,9 +21,11 @@ abstract public class Node implements Comparable<Node>{
     public int path_cost;
     int heuristic;
     public String strategy;
-    public abstract int heuristic();
+
+    
     public Node(Node parent, State state, Operator operator, String strategy) {
         this.parent = parent;
+        // if root
         if (parent == null) {
             depth = 0;
             path_cost = 0;
@@ -22,9 +36,16 @@ abstract public class Node implements Comparable<Node>{
         this.state = state;
         this.operator = operator;
         this.strategy = strategy;
-        this.heuristic = heuristic();
+        this.heuristic = 0;
     }
 
+    
+    /*
+     * Only the greedy search compares the nodes using the values of the heuristic function,
+     * otherwise, nodes are compared by the addition of path cost and heuristic value,
+     * given that the heuristic function evaluates to 0 in case of uninformed search strategies.
+     */
+    @Override
     public int compareTo(Node node) {
         if (strategy.startsWith("GR")) {
             return heuristic - node.heuristic;
@@ -32,7 +53,11 @@ abstract public class Node implements Comparable<Node>{
         return (path_cost + heuristic) - (node.path_cost + node.heuristic);
     }
 
-
+    public void set_heuristic(int heuristic) {
+    	this.heuristic = heuristic;
+    }
+    
+    @Override
     public String toString(){
     	String res = "depth = " + depth + "\n";
     	res += "path cost = " + path_cost;

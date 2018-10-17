@@ -6,18 +6,29 @@ import main.SearchProblem;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Main class where GenGrid() and Search(...) methods are implemented and tested in the main method. 
+ *
+ */
 public class Main {
 
+    /**
+     * Generates a grid randomly where:
+     * the dimensions n*m range from 4*4 to 5*5
+     * the number of white walkers varies between 1:7
+     * the number of obstacles varies between 0:3
+     * the positions of white walkers, obstacles, and dragon stone are generated randomly.
+     */
     public static byte [][] GenGrid() {
 //        byte [][] grid = new byte [][] {
 //                {0, 0, 0, 3},
-//                {0, 3, 4, 2},
-//                {3, 0, 3, 0},
-//                {1, 0, 0, 0}
+//                {2, 3, 0, 3},
+//                {0, 0, 3, 0},
+//                {0, 0, 0, 1}
 //        };
         
-        int n = ThreadLocalRandom.current().nextInt(4, 7);
-        int m = ThreadLocalRandom.current().nextInt(4, 7);
+        int n = ThreadLocalRandom.current().nextInt(4, 6);
+        int m = ThreadLocalRandom.current().nextInt(4, 6);
         byte [][] grid = new byte[n][m];
         grid[n - 1][m - 1] = 1;
         while(true)
@@ -31,8 +42,8 @@ public class Main {
             	
         }
         
-        int whitewalkers = ThreadLocalRandom.current().nextInt(3, 6);
-        int obstacles = ThreadLocalRandom.current().nextInt(1, 4);
+        int whitewalkers = ThreadLocalRandom.current().nextInt(1, 8);
+        int obstacles = ThreadLocalRandom.current().nextInt(0, 4);
         while(whitewalkers > 0 || obstacles > 0)
         {
         	int random = ThreadLocalRandom.current().nextInt(0, 3);
@@ -79,16 +90,29 @@ public class Main {
     	return count;
     }
 
+    /**
+     * @param grid: [][]byte, representing the initial state grid
+     * @param strategy: String, one of the search strategies [BFS, DFS, ID, UC, GR1, GR2, A*1, A*2]
+     * @param visualize: boolean, if set to true, visualize the steps of path to the final node.
+     * Instantiates an initial WestrosState and passes it to a SaveWestros instance,
+     *  then returns the result of the search. 
+     */
     public static SearchProblem.Result Search(byte grid [][], String strategy, boolean visualize) {
     	
     	byte whitewalkers = count_whitewalkers(grid);
     	byte maxDragongalsses = (byte) ThreadLocalRandom.current().nextInt(1, 4);
-        WestrosState initial = new WestrosState(grid, (byte) (grid[0].length - 1), (byte) (grid.length - 1), maxDragongalsses, whitewalkers);
+//        maxDragongalsses = 3;
+    	WestrosState initial = new WestrosState(grid, (byte) (grid[0].length - 1), (byte) (grid.length - 1), maxDragongalsses, whitewalkers);
         initial.set_maxDragonglasses(maxDragongalsses);
         System.out.println("maxDragongalsses = " + maxDragongalsses + "\n");
+        
         SearchProblem problem = new SaveWestros(initial);
-
         SearchProblem.Result result = problem.search(strategy);
+        
+        /*
+         *  If visualize is set to true, show the states of all nodes in the path
+         *  from the initial state to the final node in the discovered solution.
+         */  
         if(visualize && result != null) {
             Node[] resultArray = result.resultArray;
             for (Node node: resultArray) {
@@ -97,11 +121,16 @@ public class Main {
         }
         return result;
     }
+    
     public static void main(String [] args) {
     	byte [][] grid = GenGrid();
     	print_grid(grid);
-        SearchProblem.Result result = Search(grid, "A*2", true);
-        System.out.println(result);
+    	
+        SearchProblem.Result result = Search(grid, "A*1", true);
+        if(result == null)
+        	System.out.println("No solution!");
+        else
+        	System.out.println(result);
     }
 
 }

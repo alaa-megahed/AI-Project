@@ -3,12 +3,15 @@ package project1;
 import main.Operator;
 import main.State;
 
+/**
+ * A subclass from the abstract State class.
+ * It contains all the information that describes a state in the SaveWestros search problem.
+ * A state is represented by a grid, where each cell has a value in [0:4],
+ * (0 => empty, 1 => Jon, 2 => dragonstone, 3 => white walker, 4 => obstacle),
+ * The state also has the number of remaining dragonglasses, the alive white walkers,
+ *  and the maximum number of dragonglasses allowed to Jon.
+ */
 public class WestrosState extends State {
-//
-//    enum Grid {
-//        EMPTY, JON, DRAGON, WHITEWALKER, OBSTACLE;
-//    }
-    // 0: empty, 1: jon, 2: dragonstone, 3: white walker, 4: obstacle
 
     public byte grid[][];
     public byte xJon, yJon, dragonGlasses, whiteWalkers;
