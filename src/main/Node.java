@@ -8,7 +8,7 @@ package main;
  * (3) the operator applied to generate this node,
  * (4) the depth of the node in the tree,
  * (5) the path cost from the root.
- * In addition to the search strategy.
+ * In addition to "evaluate" variable, that is used to compare nodes.
  *
  */
 
@@ -20,7 +20,6 @@ public class Node implements Comparable<Node>{
     int depth;
     public int path_cost;
     int evaluate;
-    public String strategy;
 
     
     public Node(Node parent, State state, Operator operator) {
@@ -42,28 +41,19 @@ public class Node implements Comparable<Node>{
     }
     
     /*
-     * Only the greedy search compares the nodes using the values of the heuristic function,
-     * otherwise, nodes are compared by the addition of path cost and heuristic value,
+     * Compares the nodes by the value of "evaluate".
+     * Only in the greedy search "evaluate" is set to the value of the heuristic function,
+     * otherwise, nodes are compared by the sum of path cost and heuristic value,
      * given that the heuristic function evaluates to 0 in case of uninformed search strategies.
+     * The conflicts are resolved by comparing the depth and returning the one with the less depth.
      */
     @Override
     public int compareTo(Node node) {
     	if(evaluate == node.evaluate)
     		return depth - node.depth;
     	return evaluate - node.evaluate;
-//        if (strategy.startsWith("GR")) {
-//        	if(heuristic == node.heuristic)
-//        		return depth - node.depth;
-//            return heuristic - node.heuristic;
-//        }
-//        if((path_cost + heuristic) == (node.path_cost + node.heuristic))
-//        	return depth - node.depth;
-//        return (path_cost + heuristic) - (node.path_cost + node.heuristic);
     }
 
-//    public void set_heuristic(int heuristic) {
-//    	this.heuristic = heuristic;
-//    }
     
     @Override
     public String toString(){

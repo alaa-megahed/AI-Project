@@ -1,6 +1,5 @@
 package project1;
 
-import main.Operator;
 import main.State;
 
 /**

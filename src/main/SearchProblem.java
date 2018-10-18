@@ -2,7 +2,6 @@ package main;
 
 import java.util.*;
 
-import javax.xml.stream.events.StartDocument;
 
 import main.Node;
 
@@ -148,7 +147,7 @@ abstract public class SearchProblem {
     /**
      * A class for the result.
      * Given a node that passes the goal test, it computes all the steps performed to reach the goal
-     * using backtracking. Then we can display these steps and an evaluation of the search, e.g., 
+     * by using backtracking. Then we can display these steps and an evaluation of the search, e.g., 
      * the cost, and the number of expanded nodes.
      *
      */
@@ -180,11 +179,13 @@ abstract public class SearchProblem {
         @Override
         public String toString() {
             String result = "STEPS:\n";
-            for (String s: steps) {
+            for (int i = 0; i < steps.length; ++i) {
+            	String s = steps[i];
                 result += s;
-                result += "\n";
+                if(i != steps.length - 1)
+                	result += " - ";
             }
-            result += "\n";
+            result += "\n\n";
             result += "EVALUATION\n";
             result += "Cost = " + cost + "\n";
             result += "Expanded nodes: ";

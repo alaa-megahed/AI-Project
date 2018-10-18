@@ -3,7 +3,7 @@ package project1;
 import main.Node;
 import main.Operator;
 import main.SearchProblem;
-import main.State;
+
 
 import java.util.ArrayList;
 
@@ -13,8 +13,6 @@ import java.util.ArrayList;
  */
 public class SaveWestros extends SearchProblem {
 
-	
-	
     /**
      * @param initial
      * The constructor takes the initial state as input. 
@@ -23,7 +21,6 @@ public class SaveWestros extends SearchProblem {
     public SaveWestros(WestrosState initial) {
 
         Operator operators[] = new Operator[]{
-
                 new Operator(1, 1, "Move up"), // move up
                 new Operator(1, 2, "Move down"), //move down
                 new Operator(1, 3, "Move left"), // move left
@@ -89,7 +86,7 @@ public class SaveWestros extends SearchProblem {
 	}
 	
     /* 
-     * Returns the a list of new nodes resulting from expanding a node.
+     * Returns the list of new nodes resulting from expanding a node.
      * It defines the preconditions and consequences of applying each operator.
      */
     @Override
@@ -170,7 +167,7 @@ public class SaveWestros extends SearchProblem {
         
                 } break;
                 /*
-                 * Case 6 (pickup dragon galss).
+                 * Case 6 (pickup dragonglasses).
                  * Applicable only if Jon is standing at the cell of dragon stone, 
                  * and not holding the maximum number of dragonglass pieces allowed for him.
                  * If applied, update the number of dragon glasses to be the maximum allowed for Jon.
