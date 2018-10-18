@@ -23,8 +23,8 @@ abstract public class SearchProblem {
     public State initial;
     public abstract boolean goal_test(Node node);
     public abstract int path_cost(Node node);
-    public abstract int heuristic(Node node);
-    public abstract ArrayList<Node> expand(Node node);
+    public abstract int heuristic(Node node, String strategy);
+    public abstract ArrayList<Node> expand(Node node, String strategy);
     final static int INF = (int) 1e7;
     private int expanded_nodes = 0;
 
@@ -48,8 +48,12 @@ abstract public class SearchProblem {
      */
     public Result generalSearch(String strategy, int max_depth) {
     	SearchQueue q = new SearchQueue(strategy);
-    	Node root = new Node(null, initial, null, strategy);
-    	root.set_heuristic(heuristic(root));
+    	Node root = new Node(null, initial, null);
+    	int heuristic = heuristic(root, strategy);
+    	if(strategy.startsWith("GR"))
+    		root.set_evaluate(heuristic);
+    	else
+    		root.set_evaluate(heuristic + root.path_cost);
         q.add(root);
 
         while(!q.isEmpty()) {
@@ -57,7 +61,7 @@ abstract public class SearchProblem {
             if(goal_test(current))
                 return new Result(current, expanded_nodes);
             expanded_nodes++;
-            ArrayList<Node> next = expand(current);
+            ArrayList<Node> next = expand(current, strategy);
             for (Node node: next) {
                 if(node.depth <= max_depth && !isRepeated(node, node.parent))
                 	q.add(node);

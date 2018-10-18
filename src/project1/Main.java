@@ -126,7 +126,7 @@ public class Main {
     	byte [][] grid = GenGrid();
     	print_grid(grid);
     	
-        SearchProblem.Result result = Search(grid, "A*1", true);
+        SearchProblem.Result result = Search(grid, "UC", true);
         if(result == null)
         	System.out.println("No solution!");
         else

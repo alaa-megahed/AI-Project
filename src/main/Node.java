@@ -19,11 +19,11 @@ public class Node implements Comparable<Node>{
     public Operator operator;
     int depth;
     public int path_cost;
-    int heuristic;
+    int evaluate;
     public String strategy;
 
     
-    public Node(Node parent, State state, Operator operator, String strategy) {
+    public Node(Node parent, State state, Operator operator) {
         this.parent = parent;
         // if root
         if (parent == null) {
@@ -35,10 +35,11 @@ public class Node implements Comparable<Node>{
         }
         this.state = state;
         this.operator = operator;
-        this.strategy = strategy;
-        this.heuristic = 0;
     }
 
+    public void set_evaluate(int evaluate) {
+    	this.evaluate = evaluate;
+    }
     
     /*
      * Only the greedy search compares the nodes using the values of the heuristic function,
@@ -47,15 +48,22 @@ public class Node implements Comparable<Node>{
      */
     @Override
     public int compareTo(Node node) {
-        if (strategy.startsWith("GR")) {
-            return heuristic - node.heuristic;
-        }
-        return (path_cost + heuristic) - (node.path_cost + node.heuristic);
+    	if(evaluate == node.evaluate)
+    		return depth - node.depth;
+    	return evaluate - node.evaluate;
+//        if (strategy.startsWith("GR")) {
+//        	if(heuristic == node.heuristic)
+//        		return depth - node.depth;
+//            return heuristic - node.heuristic;
+//        }
+//        if((path_cost + heuristic) == (node.path_cost + node.heuristic))
+//        	return depth - node.depth;
+//        return (path_cost + heuristic) - (node.path_cost + node.heuristic);
     }
 
-    public void set_heuristic(int heuristic) {
-    	this.heuristic = heuristic;
-    }
+//    public void set_heuristic(int heuristic) {
+//    	this.heuristic = heuristic;
+//    }
     
     @Override
     public String toString(){

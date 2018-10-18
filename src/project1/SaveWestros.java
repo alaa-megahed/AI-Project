@@ -57,12 +57,12 @@ public class SaveWestros extends SearchProblem {
 	 * Two admissible heuristic functions are defined.  
 	 */
 	@Override
-	public int heuristic(Node node) {
+	public int heuristic(Node node, String strategy) {
 		/*
     	 * First admissible heuristic function is defined as follows:
     	 * h(n) = ⌈the number of remaining white walkers / 3⌉ * 8.
     	 */
-        if (node.strategy.endsWith("1"))
+        if (strategy.endsWith("1"))
             return (int) (Math.ceil(((WestrosState)node.state).whiteWalkers)/3) * 8;
        
         /*
@@ -70,7 +70,7 @@ public class SaveWestros extends SearchProblem {
     	 * h(n) = ⌈the number of remaining white walkers / 3⌉ * 8
     	 * 		 + (the Manhattan distance between Jon and the farthest alive white walker - 1). 
     	 */
-        if (node.strategy.endsWith("2")) {
+        if (strategy.endsWith("2")) {
         	int max_dist = 0;
         	byte [][] grid = ((WestrosState)node.state).grid;
         	for (int i = 0; i < grid.length; i++) {
@@ -93,7 +93,7 @@ public class SaveWestros extends SearchProblem {
      * It defines the preconditions and consequences of applying each operator.
      */
     @Override
-    public ArrayList<Node> expand(Node node) {
+    public ArrayList<Node> expand(Node node, String strategy) {
         WestrosState state = ((WestrosState)node.state);
         ArrayList<Node> result = new ArrayList<>();
         // Loop on all operators
@@ -188,9 +188,13 @@ public class SaveWestros extends SearchProblem {
             // If the node is to be added, i.e., the operator was valid, then add new node to the list of children.
             if(add){
             	WestrosState new_state = new WestrosState(grid, xJon_new, yJon_new, dragonGlasses_new, whiteWalkers_new);
-                new_state.set_maxDragonglasses(((WestrosState)node.state).get_maxDragonglasses());
-            	Node new_node = new Node(node, new_state, op, node.strategy);
-            	new_node.set_heuristic(heuristic(new_node));
+                new_state.set_maxDragonglasses(((WestrosState)node.state).get_maxDragonglasses());	
+                Node new_node = new Node(node, new_state, op);
+                int heuristic = heuristic(new_node, strategy);
+                if(strategy.startsWith("GR"))
+                	new_node.set_evaluate(heuristic);
+                else
+                	new_node.set_evaluate(heuristic + new_node.path_cost);
                 result.add(new_node);
             }
             
