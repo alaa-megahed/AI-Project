@@ -20,46 +20,46 @@ public class Main {
      * the positions of white walkers, obstacles, and dragon stone are generated randomly.
      */
     public static byte [][] GenGrid() {
-//        byte [][] grid = new byte [][] {
-//                {0, 0, 0, 3},
-//                {2, 3, 0, 3},
-//                {0, 0, 3, 0},
-//                {0, 0, 0, 1}
-//        };
+        byte [][] grid = new byte [][] {
+                {0, 0, 0, 3},
+                {0, 3, 0, 3},
+                {0, 0, 3, 0},
+                {0, 0, 2, 1}
+        };
         
-        int n = ThreadLocalRandom.current().nextInt(4, 6);
-        int m = ThreadLocalRandom.current().nextInt(4, 6);
-        byte [][] grid = new byte[n][m];
-        grid[n - 1][m - 1] = 1;
-        while(true)
-        {
-        	int stoney = ThreadLocalRandom.current().nextInt(0, n);
-            int stonex = ThreadLocalRandom.current().nextInt(0, m);
-            if(stoney != n - 1 || stonex != m - 1) {
-            	grid[stoney][stonex] = 2;
-            	break;
-            }
-            	
-        }
-        
-        int whitewalkers = ThreadLocalRandom.current().nextInt(1, 8);
-        int obstacles = ThreadLocalRandom.current().nextInt(0, 4);
-        while(whitewalkers > 0 || obstacles > 0)
-        {
-        	int random = ThreadLocalRandom.current().nextInt(0, 3);
-        	int y = ThreadLocalRandom.current().nextInt(0, n);
-            int x = ThreadLocalRandom.current().nextInt(0, m);
-            if(grid[y][x] == 0) {
-            	if(random == 1 && whitewalkers > 0) {
-            		grid[y][x] = 3;
-            		whitewalkers--;
-            	}
-            	else if(random == 2 && obstacles > 0) {
-            		grid[y][x] = 4;
-            		obstacles--;
-            	}
-            }
-        }
+//        int n = ThreadLocalRandom.current().nextInt(4, 6);
+//        int m = ThreadLocalRandom.current().nextInt(4, 6);
+//        byte [][] grid = new byte[n][m];
+//        grid[n - 1][m - 1] = 1;
+//        while(true)
+//        {
+//        	int stoney = ThreadLocalRandom.current().nextInt(0, n);
+//            int stonex = ThreadLocalRandom.current().nextInt(0, m);
+//            if(stoney != n - 1 || stonex != m - 1) {
+//            	grid[stoney][stonex] = 2;
+//            	break;
+//            }
+//            	
+//        }
+//        
+//        int whitewalkers = ThreadLocalRandom.current().nextInt(1, 8);
+//        int obstacles = ThreadLocalRandom.current().nextInt(0, 4);
+//        while(whitewalkers > 0 || obstacles > 0)
+//        {
+//        	int random = ThreadLocalRandom.current().nextInt(0, 3);
+//        	int y = ThreadLocalRandom.current().nextInt(0, n);
+//            int x = ThreadLocalRandom.current().nextInt(0, m);
+//            if(grid[y][x] == 0) {
+//            	if(random == 1 && whitewalkers > 0) {
+//            		grid[y][x] = 3;
+//            		whitewalkers--;
+//            	}
+//            	else if(random == 2 && obstacles > 0) {
+//            		grid[y][x] = 4;
+//            		obstacles--;
+//            	}
+//            }
+//        }
         
         return grid;
 
@@ -101,8 +101,8 @@ public class Main {
     	
     	byte whitewalkers = count_whitewalkers(grid);
     	byte maxDragongalsses = (byte) ThreadLocalRandom.current().nextInt(1, 4);
-//        maxDragongalsses = 3;
-    	WestrosState initial = new WestrosState(grid, (byte) (grid[0].length - 1), (byte) (grid.length - 1), maxDragongalsses, whitewalkers);
+        maxDragongalsses = 3;
+    	WestrosState initial = new WestrosState(grid, (byte) (grid[0].length - 1), (byte) (grid.length - 1), (byte) 0, whitewalkers);
         initial.set_maxDragonglasses(maxDragongalsses);
         System.out.println("maxDragongalsses = " + maxDragongalsses + "\n");
         
